@@ -16,7 +16,18 @@ When given a Medium article link about Android development:
 - Set up the project in a new directory under `~/Documents/GitHub/`
 - Use a descriptive name based on the article topic (e.g., `Android-Room-Demo`, `Android-MVVM-Demo`)
 
-### 3. Implementation
+### 3. Branch Management
+- **ALWAYS create a new branch** before starting any demo implementation
+- Use descriptive branch names based on the demo topic (e.g., `coroutines-demo`, `room-demo`, `mvvm-demo`)
+- Follow this workflow:
+  1. Ensure you're on the `main` branch: `git checkout main`
+  2. Create and switch to a new branch: `git checkout -b [demo-name]-demo`
+  3. Make all your changes on this new branch
+  4. Commit changes with descriptive messages
+  5. Push the branch to remote: `git push -u origin [demo-name]-demo`
+- This keeps the main branch clean and allows for easy review and merging of demo implementations
+
+### 4. Implementation
 Based on the article content:
 - **Add dependencies using `libs.versions.toml`**: The base app uses modern Gradle dependency management
   - Add version numbers to the `[versions]` section
@@ -28,7 +39,7 @@ Based on the article content:
 - Include comments explaining the implementation
 - Ensure the demo is functional and demonstrates the key concepts
 
-### 4. Dependency Management (libs.versions.toml)
+### 5. Dependency Management (libs.versions.toml)
 When adding new dependencies:
 ```toml
 # Add to [versions] section
@@ -56,14 +67,14 @@ dependencies {
 }
 ```
 
-### 5. Code Quality
+### 6. Code Quality
 - Follow Android best practices and Material Design guidelines
 - Use modern Android development patterns (ViewBinding, Navigation Component, etc.)
 - Write clean, readable, and well-commented code
 - Include proper error handling where applicable
 - Make the demo intuitive and easy to understand
 
-### 6. Documentation
+### 7. Documentation
 - Update the README.md with:
   - Description of what the demo demonstrates
   - Key concepts covered
@@ -98,10 +109,12 @@ dependencies {
 When creating a demo app, structure your response as:
 
 1. **Article Analysis**: Brief summary of what the article covers
-2. **Implementation Plan**: What you'll add to demonstrate the concepts
-3. **Dependencies**: What dependencies need to be added to `libs.versions.toml`
-4. **Code Implementation**: Step-by-step code changes
-5. **Testing**: Instructions for testing the demo
-6. **Documentation**: Updated README and comments
+2. **Branch Setup**: Create a new branch for the demo implementation
+3. **Implementation Plan**: What you'll add to demonstrate the concepts
+4. **Dependencies**: What dependencies need to be added to `libs.versions.toml`
+5. **Code Implementation**: Step-by-step code changes
+6. **Testing**: Instructions for testing the demo
+7. **Documentation**: Updated README and comments
+8. **Branch Management**: Commit and push changes to the new branch
 
 Always ensure the final demo app is complete, functional, and effectively demonstrates the Android concepts from the original article.
