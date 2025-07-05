@@ -29,7 +29,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Flow vs LiveData Demo"
+                    android:text="Flow vs LiveData - Collector Behavior Demo"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     android:textColor="@color/black"
@@ -38,7 +38,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="This demo shows how Flow can behave like LiveData using stateIn with proper sharing strategies."
+                    android:text="This demo shows how different observable types behave when collectors are present or absent."
                     android:textSize="14sp"
                     android:textColor="@android:color/darker_gray" />
 
@@ -84,77 +84,48 @@
                     android:id="@+id/tvLiveDataDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Survives configuration changes, not process death"
+                    android:text="Single value holder, lifecycle-aware"
                     android:textSize="12sp"
                     android:textColor="@android:color/darker_gray"
                     android:layout_marginBottom="8dp" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnIncrementLiveData"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/tvLiveDataStatus"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Increment LiveData"
-                    style="@style/Widget.Material3.Button" />
+                    android:text="LiveData: 🔴 Inactive"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="start">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnStartLiveData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start Observing"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_marginEnd="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnStopLiveData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Stop Observing"
+                        style="@style/Widget.Material3.Button.OutlinedButton" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Basic Flow Section -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardElevation="2dp"
-            app:cardCornerRadius="8dp"
-            app:strokeColor="@android:color/holo_red_dark"
-            app:strokeWidth="2dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Basic Flow Approach"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:id="@+id/tvBasicFlowValue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Basic Flow: 0"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="4dp" />
-
-                <TextView
-                    android:id="@+id/tvBasicFlowDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Doesn't survive configuration changes"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/darker_gray"
-                    android:layout_marginBottom="8dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnIncrementBasicFlow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Increment Basic Flow"
-                    style="@style/Widget.Material3.Button.OutlinedButton" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Flow with stateIn Section -->
+        <!-- StateFlow Section -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -173,42 +144,146 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Flow with stateIn (LiveData-like)"
+                    android:text="StateFlow (Hot Flow)"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@android:color/holo_blue_dark"
                     android:layout_marginBottom="8dp" />
 
                 <TextView
-                    android:id="@+id/tvFlowWithStateInValue"
+                    android:id="@+id/tvStateFlowValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Flow with stateIn: 0"
+                    android:text="StateFlow: 0"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
-                    android:id="@+id/tvFlowWithStateInDescription"
+                    android:id="@+id/tvStateFlowDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Survives configuration changes like LiveData"
+                    android:text="Hot Flow, single value holder"
                     android:textSize="12sp"
                     android:textColor="@android:color/darker_gray"
                     android:layout_marginBottom="8dp" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnIncrementFlowWithStateIn"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/tvStateFlowStatus"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Increment Flow with stateIn"
-                    style="@style/Widget.Material3.Button.OutlinedButton" />
+                    android:text="StateFlow: 🔴 Inactive"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="start">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnStartStateFlow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start Collecting"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_marginEnd="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnStopStateFlow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Stop Collecting"
+                        style="@style/Widget.Material3.Button.OutlinedButton" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Continuous Flow Section -->
+        <!-- Cold Flow Section -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="8dp"
+            app:strokeColor="@android:color/holo_red_dark"
+            app:strokeWidth="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cold Flow"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvColdFlowValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cold Flow: Stopped"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/tvColdFlowDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No collector - flow is inactive"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvColdFlowStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cold Flow: 🔴 Inactive"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="start">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnStartColdFlow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start Collecting"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_marginEnd="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnStopColdFlow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Stop Collecting"
+                        style="@style/Widget.Material3.Button.OutlinedButton" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Hot Flow Eagerly Section -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -227,35 +302,146 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Continuous Flow Stream"
+                    android:text="Hot Flow (Eagerly)"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@android:color/holo_green_dark"
                     android:layout_marginBottom="8dp" />
 
                 <TextView
-                    android:id="@+id/tvContinuousFlowValue"
+                    android:id="@+id/tvHotFlowEagerlyValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Continuous Flow: 0"
+                    android:text="Hot Flow (Eagerly): 0"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
-                    android:id="@+id/tvContinuousFlowDescription"
+                    android:id="@+id/tvHotFlowEagerlyDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Updates every 2 seconds (Flow streaming)"
+                    android:text="Starts immediately, continues without collectors"
                     android:textSize="12sp"
                     android:textColor="@android:color/darker_gray"
                     android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvHotFlowEagerlyStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hot Flow (Eagerly): 🔴 Inactive"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="start">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnStartHotFlowEagerly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start Collecting"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_marginEnd="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnStopHotFlowEagerly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Stop Collecting"
+                        style="@style/Widget.Material3.Button.OutlinedButton" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Error State Section -->
+        <!-- Hot Flow WhileSubscribed Section -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="8dp"
+            app:strokeColor="@android:color/holo_purple"
+            app:strokeWidth="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hot Flow (WhileSubscribed)"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/holo_purple"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvHotFlowWhileSubscribedValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hot Flow (WhileSubscribed): 0"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/tvHotFlowWhileSubscribedDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Starts when first collector arrives"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvHotFlowWhileSubscribedStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hot Flow (WhileSubscribed): 🔴 Inactive"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="start">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnStartHotFlowWhileSubscribed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start Collecting"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_marginEnd="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnStopHotFlowWhileSubscribed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Stop Collecting"
+                        style="@style/Widget.Material3.Button.OutlinedButton" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Status Messages Section -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -289,28 +475,12 @@
                     android:visibility="gone"
                     android:layout_marginBottom="8dp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnClearError"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="start">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnClearError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Clear"
-                        style="@style/Widget.Material3.Button.TextButton"
-                        android:layout_marginEnd="8dp" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSimulateConfigChange"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Simulate Config Change"
-                        style="@style/Widget.Material3.Button.TextButton" />
-
-                </LinearLayout>
+                    android:text="Clear Status"
+                    style="@style/Widget.Material3.Button.TextButton" />
 
             </LinearLayout>
 
@@ -343,7 +513,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Reset All Counters"
-                    style="@style/Widget.Material3.Button" />
+                    style="@style/Widget.Material3.Button"
+                    android:layout_marginBottom="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnNavigateToSecond"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Go to Second Fragment"
+                    style="@style/Widget.Material3.Button.OutlinedButton" />
 
             </LinearLayout>
 
@@ -367,7 +545,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="How to Test"
+                    android:text="How to Test Collector Behavior"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/black"
@@ -376,7 +554,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="1. Increment different counters\n2. Rotate your device (configuration change)\n3. Observe which values are preserved\n4. LiveData and Flow with stateIn should survive\n5. Basic Flow will reset to 0"
+                    android:text="1. Start with all collectors stopped\n2. Observe which flows continue running without collectors:\n   • Cold Flow: ❌ Stops completely\n   • Hot Flow (Eagerly): ✅ Continues running\n   • Hot Flow (WhileSubscribed): ❌ Stops when no collectors\n3. Start collecting each flow and observe behavior\n4. Stop collecting and see which ones continue\n5. Key insight: Eagerly vs WhileSubscribed sharing strategies"
                     android:textSize="14sp"
                     android:textColor="@android:color/darker_gray"
                     android:lineSpacingExtra="4dp" />

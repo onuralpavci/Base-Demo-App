@@ -1,80 +1,294 @@
-# Base Demo App
+# Android Demo App - Flow vs LiveData Collector Behavior
 
-A clean, minimal Android application template designed for demonstrating Android implementations and features.
+This demo application demonstrates the key differences between Flow and LiveData in Android, specifically focusing on **how different observable types behave when collectors are present or absent**.
 
-## Overview
+## Demo Overview
 
-This is a simplified Android project that serves as a base template for creating demo applications. It provides a clean starting point with:
+This demo is based on the Medium article: [Tricky Android Interview Questions: ViewModel & State Handling Edition](https://levelup.gitconnected.com/tricky-android-interview-questions-viewmodel-state-handling-edition-a2f7a99c705f)
 
-- **Navigation**: Two fragments with navigation between them
-- **Clean UI**: Minimal interface with just essential elements
-- **Modern Architecture**: Uses ViewBinding and Navigation Component
-- **Material Design**: Follows Material Design guidelines
+### Key Concepts Demonstrated
 
-## Project Structure
-
-```
-app/
-├── src/main/
-│   ├── java/com/avciapps/basedemoapp/
-│   │   ├── MainActivity.kt          # Main activity with navigation setup
-│   │   ├── FirstFragment.kt         # First fragment with navigation
-│   │   └── SecondFragment.kt        # Second fragment with navigation
-│   ├── res/
-│   │   ├── layout/
-│   │   │   ├── activity_main.xml    # Main activity layout
-│   │   │   ├── content_main.xml     # Content layout with NavHostFragment
-│   │   │   ├── fragment_first.xml   # First fragment layout
-│   │   │   └── fragment_second.xml  # Second fragment layout
-│   │   ├── navigation/
-│   │   │   └── nav_graph.xml        # Navigation graph
-│   │   └── values/
-│   │       ├── strings.xml          # String resources
-│   │       ├── colors.xml           # Color definitions
-│   │       └── themes.xml           # App themes
-│   └── AndroidManifest.xml
-└── build.gradle.kts                 # App-level build configuration
-```
+1. **LiveData Behavior**: Single value holder, lifecycle-aware
+2. **Cold Flow Behavior**: Only works when collected, stops when collector is cancelled
+3. **Hot Flow with Eagerly**: Starts immediately, continues even without collectors
+4. **Hot Flow with WhileSubscribed**: Starts when first collector arrives, stops when no collectors
+5. **StateFlow**: Hot Flow similar to LiveData
 
 ## Features
 
-- **Fragment Navigation**: Two fragments that can navigate to each other
-- **Clean Layout**: Simple UI with just a title and navigation buttons
-- **ViewBinding**: Modern way to access views without findViewById
-- **Navigation Component**: Type-safe navigation between destinations
-- **Material Design**: Uses Material Design components and theming
+### 1. LiveData Counter
+- Uses traditional `MutableLiveData` and `LiveData`
+- Single value holder
+- Lifecycle-aware
+- Always active (no start/stop needed)
 
-## Getting Started
+### 2. StateFlow Counter (Hot Flow)
+- Uses `MutableStateFlow` - already a hot Flow
+- Single value holder
+- Similar behavior to LiveData
+- Can be started/stopped for demonstration
 
-1. Clone this repository
-2. Open the project in Android Studio
-3. Build and run the application
+### 3. Cold Flow
+- Uses `flow { }` builder - creates cold Flow
+- Only works when collected
+- Stops completely when collector is cancelled
+- Demonstrates cold Flow behavior
 
-## Customization
+### 4. Hot Flow (Eagerly)
+- Uses `flow { }` with `SharingStarted.Eagerly`
+- Starts immediately when ViewModel is created
+- Continues running even without collectors
+- Demonstrates eager sharing strategy
 
-This base app is designed to be easily customizable for demonstrating various Android features:
+### 5. Hot Flow (WhileSubscribed)
+- Uses `flow { }` with `SharingStarted.WhileSubscribed()`
+- Starts when first collector arrives
+- Stops when no collectors are active
+- Demonstrates lazy sharing strategy
 
-- **Add new fragments**: Create new fragments and add them to the navigation graph
-- **Implement features**: Add your specific Android implementation code
-- **Modify UI**: Update layouts and themes as needed
-- **Add dependencies**: Include any required libraries in build.gradle.kts
+## How to Test
 
-## Usage for Demos
+1. **Launch the app** - The Flow vs LiveData demo will be the first screen
+2. **Start with all collectors stopped** - Observe which flows continue running
+3. **Test each flow type**:
+   - **Cold Flow**: ❌ Stops completely when no collectors
+   - **Hot Flow (Eagerly)**: ✅ Continues running without collectors
+   - **Hot Flow (WhileSubscribed)**: ❌ Stops when no collectors
+   - **StateFlow**: ✅ Continues internally (hot Flow)
+4. **Start/Stop collectors** to see behavior changes
+5. **Key insight**: Eagerly vs WhileSubscribed sharing strategies
 
-This template is perfect for:
-- Demonstrating Android UI patterns
-- Showing navigation implementations
-- Testing new Android features
-- Creating tutorial applications
-- Prototyping Android concepts
+## Technical Implementation
 
-## Requirements
+### ViewModel Structure
 
-- Android Studio Arctic Fox or later
-- Minimum SDK: API 24 (Android 7.0)
-- Target SDK: API 34 (Android 14)
-- Kotlin 1.8+
+```kotlin
+class FlowVsLiveDataViewModel : ViewModel() {
+    // LiveData approach
+    private val _liveDataCounter = MutableLiveData<Int>(0)
+    val liveDataCounter: LiveData<Int> = _liveDataCounter
+    
+    // Cold Flow - only works when collected
+    fun getColdFlow() = flow {
+        val currentValue = counter.get()
+        emit(currentValue)
+        delay(100) // Simulate processing
+        emit(currentValue + 1)
+    }
+    
+    // Hot Flow with Eagerly - starts immediately
+    private val hotFlowEagerly = flow {
+        var value = 0
+        while (true) {
+            emit(value)
+            value++
+            delay(1000) // Update every second
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = 0
+    )
+    
+    // Hot Flow with WhileSubscribed - starts when first collector arrives
+    private val hotFlowWhileSubscribed = flow {
+        var value = 0
+        while (true) {
+            emit(value)
+            value++
+            delay(1000) // Update every second
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = 0
+    )
+}
+```
 
-## License
+### Key Differences: Collector Behavior
 
-This project is open source and available under the MIT License.
+| Approach | Type | Without Collectors | With Collectors | Start Strategy |
+|----------|------|-------------------|-----------------|----------------|
+| LiveData | Hot | ✅ Active | ✅ Active | Always |
+| StateFlow | Hot | ✅ Active | ✅ Active | Always |
+| Cold Flow | Cold | ❌ Inactive | ✅ Active | On Collection |
+| Hot Flow (Eagerly) | Hot | ✅ Active | ✅ Active | Immediately |
+| Hot Flow (WhileSubscribed) | Hot | ❌ Inactive | ✅ Active | On First Collector |
+
+### Sharing Strategies Explained
+
+#### Eagerly
+```kotlin
+.stateIn(
+    scope = viewModelScope,
+    started = SharingStarted.Eagerly,
+    initialValue = 0
+)
+```
+- **Behavior**: Starts immediately when ViewModel is created
+- **Use case**: When you want the flow to start running right away
+- **Resource usage**: Continues consuming resources even without collectors
+
+#### WhileSubscribed
+```kotlin
+.stateIn(
+    scope = viewModelScope,
+    started = SharingStarted.WhileSubscribed(),
+    initialValue = 0
+)
+```
+- **Behavior**: Starts when first collector arrives, stops when no collectors
+- **Use case**: When you want to save resources when no one is observing
+- **Resource usage**: Only consumes resources when collectors are active
+
+### Dependencies Used
+
+- `androidx.lifecycle:lifecycle-viewmodel-ktx` - ViewModel and LiveData
+- `androidx.lifecycle:lifecycle-livedata-ktx` - LiveData extensions
+- `kotlinx-coroutines-android` - Coroutines and Flow
+
+## Learning Objectives
+
+1. **Understand the difference** between cold and hot Flow
+2. **Learn sharing strategies** (Eagerly vs WhileSubscribed)
+3. **See practical examples** of when each approach is appropriate
+4. **Understand resource management** implications
+5. **Learn about collector behavior** and lifecycle
+6. **Master the key concept**: When flows start/stop based on collectors
+
+## References
+
+- [Original Medium Article](https://levelup.gitconnected.com/tricky-android-interview-questions-viewmodel-state-handling-edition-a2f7a99c705f)
+- [Android Developer Documentation - LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
+- [Kotlin Flow Documentation](https://kotlinlang.org/docs/flow.html)
+- [Android Developer Documentation - StateFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [Kotlin Coroutines Flow - stateIn](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/state-in.html)
+
+## Running the Demo
+
+1. Clone the repository
+2. Open in Android Studio
+3. Build and run on a device or emulator
+4. Navigate through the demo to see the different behaviors
+5. **Key test**: Start/Stop collectors to observe behavior differences
+
+## Branch Information
+
+This demo is implemented in the `demo-flow-vs-livedata` branch.
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Android Studio or Cursor IDE
+- Git
+- Basic knowledge of Android development
+
+### How to Use
+
+1. **Clone this repository** (if you haven't already):
+   ```bash
+   git clone https://github.com/onuralpavci/Base-Demo-App.git
+   cd Base-Demo-App
+   ```
+
+2. **Create a new branch for your demo**:
+   ```bash
+   git checkout -b demo-<topic-name>
+   ```
+   
+   **Example**:
+   ```bash
+   git checkout -b demo-room-database
+   ```
+
+3. **Start implementing your demo** based on the Medium article you want to follow.
+
+4. **Use the .cursorrules file** in this project to guide your implementation.
+
+## 📁 Project Structure
+
+```
+Base-Demo-App/
+├── app/
+│   ├── src/main/
+│   │   ├── java/com/avciapps/basedemoapp/
+│   │   │   ├── MainActivity.kt
+│   │   │   ├── FirstFragment.kt
+│   │   │   └── SecondFragment.kt
+│   │   └── res/
+│   │       ├── layout/
+│   │       ├── navigation/
+│   │       └── values/
+│   └── build.gradle.kts
+├── gradle/
+│   └── libs.versions.toml
+├── .cursorrules
+└── README.md
+```
+
+## 🎯 Workflow
+
+1. **Read a Medium article** about an Android development concept
+2. **Create a new branch** for your demo implementation
+3. **Implement the concept** following the article
+4. **Add proper documentation** and comments
+5. **Test your demo** to ensure it works correctly
+
+## 📚 Example Demos
+
+You can create demos for various Android concepts:
+
+- **Room Database**: CRUD operations, DAO, entities
+- **MVVM Pattern**: ViewModels, LiveData, DataBinding
+- **Coroutines**: Async operations, background tasks
+- **Navigation Component**: Fragment navigation, deep linking
+- **Retrofit**: API calls, JSON parsing
+- **Dependency Injection**: Hilt, Dagger
+- **Jetpack Compose**: Modern UI development
+
+## 🔧 Dependencies
+
+This project uses modern Android development practices:
+
+- **Gradle Version Catalogs**: `libs.versions.toml` for dependency management
+- **ViewBinding**: For view access
+- **Navigation Component**: For fragment navigation
+- **Material Design**: For UI components
+
+## 📝 Adding Dependencies
+
+When adding new dependencies, use the `libs.versions.toml` file:
+
+```toml
+# Add to [versions] section
+room = "2.6.1"
+
+# Add to [libraries] section
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+```
+
+Then in `app/build.gradle.kts`:
+```kotlin
+dependencies {
+    implementation(libs.androidx.room.runtime)
+}
+```
+
+## 🤝 Contributing
+
+1. Create a new branch for your demo
+2. Implement the Android concept
+3. Add proper documentation
+4. Test your implementation
+5. Commit your changes
+
+## 📖 Resources
+
+- [Android Developer Documentation](https://developer.android.com/)
+- [Medium Android Articles](https://medium.com/tag/android)
+- [Kotlin Documentation](https://kotlinlang.org/docs/)
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).

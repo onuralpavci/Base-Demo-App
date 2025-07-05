@@ -34,6 +34,10 @@ private var _binding: FragmentSecondBinding? = null
         binding.buttonSecond.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
+        
+        binding.buttonFlowDemo.setOnClickListener {
+            findNavController().navigate(R.id.action_SecondFragment_to_FlowVsLiveDataFragment)
+        }
     }
 override fun onDestroyView() {
         super.onDestroyView()
