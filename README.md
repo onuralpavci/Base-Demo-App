@@ -78,50 +78,26 @@ app/
 2. Open the project in Android Studio
 3. Build and run the application
 
-## Cursor IDE Features
+## .cursorrules Configuration
 
-This project is optimized for Cursor IDE development:
+This project includes a `.cursorrules` file that configures AI assistance for Android development. You can use this configuration to create new demos from Medium articles or other sources.
 
-### 🤖 AI-Powered Development
-- **Smart Code Completion**: Enhanced Kotlin and Android code suggestions
-- **Context-Aware Assistance**: AI understands Android development patterns
-- **Automated Refactoring**: Intelligent code restructuring and optimization
-- **Bug Detection**: Proactive identification of potential issues
+### How to Create New Demos
 
-### 📁 Project Organization
-- **Intelligent File Navigation**: Quick access to related files
-- **Smart Search**: Find code, resources, and dependencies efficiently
-- **Git Integration**: Seamless version control with AI-powered commit messages
-- **Terminal Integration**: Built-in terminal for Gradle commands
+1. **Provide an Article**: Share a Medium article or any other source about Android development
+2. **AI Analysis**: The AI will analyze the article and understand the key concepts
+3. **Automatic Implementation**: The AI will create a complete demo app with:
+   - Interactive fragments demonstrating the concepts
+   - Modern UI with Material Design
+   - Proper navigation and documentation
+   - All necessary dependencies
 
-### 🛠️ Android Development Tools
-- **Gradle Integration**: Direct build and sync capabilities
-- **Layout Preview**: Visual XML layout editing
-- **Resource Management**: Easy access to strings, colors, and themes
-- **Navigation Graph Editor**: Visual navigation setup
-
-## Demo Development Workflow
-
-### 1. Branch Management
-```bash
-# Always create a new branch for demos
-git checkout main
-git checkout -b [demo-name]-demo
-```
-
-### 2. Development Process
-1. **Analyze Requirements**: Understand the Android concept to demonstrate
-2. **Plan Implementation**: Design the demo structure and navigation
-3. **Add Dependencies**: Update `gradle/libs.versions.toml` with required libraries
-4. **Implement Features**: Create fragments, layouts, and business logic
-5. **Test and Refine**: Build, test, and optimize the demo
-6. **Document**: Update README and add inline comments
-
-### 3. Code Quality
-- Follow Android best practices and Material Design guidelines
-- Use modern Android development patterns (ViewBinding, Navigation Component)
-- Write clean, readable, and well-commented code
-- Include proper error handling where applicable
+### Supported Sources
+- Medium articles about Android development
+- Android documentation
+- Tutorial blogs
+- YouTube tutorials (with written content)
+- Any other Android development resources
 
 ## Customization
 
@@ -142,14 +118,7 @@ This template is perfect for:
 - Prototyping Android concepts
 - Learning Android development with AI assistance
 
-## .cursorrules Configuration
 
-This project includes a `.cursorrules` file that configures AI assistance for Android development:
-
-- **Branch Management**: Automatic branch creation for demo development
-- **Dependency Management**: Smart suggestions for `libs.versions.toml`
-- **Code Patterns**: Android best practices and modern patterns
-- **Documentation**: Automated README and comment generation
 
 ## Requirements
 
@@ -166,22 +135,13 @@ This project includes a `.cursorrules` file that configures AI assistance for An
 
 ## Available Demos
 
-This repository includes several demo implementations:
+This repository includes demo implementations created using the `.cursorrules` configuration:
 
 ### 🌟 Coroutines Demo (`coroutines-demo` branch)
-- **7 Interactive Fragments**: Comprehensive coroutine concepts
-- **Scope Management**: Lifecycle-aware coroutine scopes
-- **Job Control**: Cancellation and supervision patterns
-- **Context Combinations**: Thread dispatchers and context merging
-- **Structured Concurrency**: Parent-child coroutine relationships
+A comprehensive demo with 7 interactive fragments demonstrating coroutine concepts from Medium articles.
 
-### 🚀 Creating New Demos
-To create a new demo:
-1. Follow the branch management workflow
-2. Use the `.cursorrules` configuration
-3. Implement your Android concept
-4. Document and test thoroughly
-5. Push to a new branch
+### 🚀 Create Your Own Demo
+Simply provide a Medium article or any Android development resource, and the AI will create a complete demo app for you!
 
 ## Contributing
 
