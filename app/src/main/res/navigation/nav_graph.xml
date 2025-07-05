@@ -3,26 +3,77 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/coroutinesHomeFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.avciapps.basedemoapp.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first" >
+        android:id="@+id/coroutinesHomeFragment"
+        android:name="com.avciapps.basedemoapp.CoroutinesHomeFragment"
+        android:label="Coroutines Demos"
+        tools:layout="@layout/fragment_coroutines_home" >
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_home_to_scope_demo"
+            app:destination="@id/scopeDemoFragment" />
+        <action
+            android:id="@+id/action_home_to_job_demo"
+            app:destination="@id/jobDemoFragment" />
+        <action
+            android:id="@+id/action_home_to_context_demo"
+            app:destination="@id/contextDemoFragment" />
+        <action
+            android:id="@+id/action_home_to_structured_demo"
+            app:destination="@id/structuredConcurrencyFragment" />
+        <action
+            android:id="@+id/action_home_to_dispatcher_demo"
+            app:destination="@id/dispatcherDemoFragment" />
+        <action
+            android:id="@+id/action_home_to_combination_demo"
+            app:destination="@id/contextCombinationFragment" />
+        <action
+            android:id="@+id/action_home_to_scope_analysis_demo"
+            app:destination="@id/scopeAnalysisFragment" />
     </fragment>
+
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.avciapps.basedemoapp.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second" >
+        android:id="@+id/scopeDemoFragment"
+        android:name="com.avciapps.basedemoapp.ScopeDemoFragment"
+        android:label="Demo 1: Coroutine Scopes"
+        tools:layout="@layout/fragment_scope_demo" />
 
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-    </fragment>
+    <fragment
+        android:id="@+id/jobDemoFragment"
+        android:name="com.avciapps.basedemoapp.JobDemoFragment"
+        android:label="Demo 2: Jobs &amp; Cancellation"
+        tools:layout="@layout/fragment_job_demo" />
+
+    <fragment
+        android:id="@+id/contextDemoFragment"
+        android:name="com.avciapps.basedemoapp.ContextDemoFragment"
+        android:label="Demo 3: Coroutine Context"
+        tools:layout="@layout/fragment_context_demo" />
+
+    <fragment
+        android:id="@+id/structuredConcurrencyFragment"
+        android:name="com.avciapps.basedemoapp.StructuredConcurrencyFragment"
+        android:label="Demo 4: Structured Concurrency"
+        tools:layout="@layout/fragment_structured_concurrency" />
+
+    <fragment
+        android:id="@+id/dispatcherDemoFragment"
+        android:name="com.avciapps.basedemoapp.DispatcherDemoFragment"
+        android:label="Demo 5: Thread Dispatchers"
+        tools:layout="@layout/fragment_dispatcher_demo" />
+
+    <fragment
+        android:id="@+id/contextCombinationFragment"
+        android:name="com.avciapps.basedemoapp.ContextCombinationFragment"
+        android:label="Demo 6: Context Combinations"
+        tools:layout="@layout/fragment_context_combination" />
+
+    <fragment
+        android:id="@+id/scopeAnalysisFragment"
+        android:name="com.avciapps.basedemoapp.ScopeAnalysisFragment"
+        android:label="Demo 7: Scope Analysis"
+        tools:layout="@layout/fragment_scope_analysis" />
+
 </navigation>
