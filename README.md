@@ -118,7 +118,254 @@ This template is perfect for:
 - Prototyping Android concepts
 - Learning Android development with AI assistance
 
+## Android Compose Screenshot Testing Demo
 
+This demo app demonstrates how to implement **Compose Screenshot Testing** in Android applications. Screenshot testing is an effective way to verify how your UI looks to users by automatically comparing screenshots against previously approved reference images.
+
+## 🎯 What This Demo Covers
+
+Based on the [Android Compose Screenshot Testing documentation](https://developer.android.com/studio/preview/compose-screenshot-testing), this demo includes:
+
+- **Setup and Configuration**: How to enable Compose Screenshot Testing in your project
+- **Sample Components**: Various UI components with different states and themes
+- **Screenshot Tests**: Comprehensive test coverage with multiple preview configurations
+- **Multi-Preview Testing**: Using `@PreviewParameter` for testing different data sets
+- **Theme Testing**: Both light and dark theme variations
+- **HTML Reports**: Automatic generation of visual difference reports
+
+## 🚀 Key Features
+
+### Sample Components
+- **GreetingCard**: Simple welcome message component
+- **CounterCard**: Interactive counter with buttons
+- **ProfileCard**: User profile information display
+- **SettingsCard**: Settings with toggle switches
+
+### Screenshot Test Coverage
+- Individual component tests
+- Multi-preview tests with different data
+- Light and dark theme variations
+- Composite component tests
+- Parameterized tests using `PreviewParameterProvider`
+
+## 📋 Requirements
+
+- Android Gradle Plugin 8.5.0-beta01 or higher
+- Kotlin 1.9.20 or higher (recommended: Kotlin 2.0+)
+- Compose enabled project
+- Compose Compiler version 1.5.4 or higher
+
+## 🛠️ Setup
+
+### 1. Dependencies
+The demo uses the following key dependencies:
+
+```kotlin
+// Screenshot testing plugin
+plugins {
+    alias(libs.plugins.screenshot)
+}
+
+// Screenshot testing dependencies
+screenshotTestImplementation(libs.screenshot.validation.api)
+screenshotTestImplementation(libs.androidx.compose.ui.tooling)
+```
+
+### 2. Configuration
+Enable screenshot testing in your project:
+
+```properties
+# gradle.properties
+android.experimental.enableScreenshotTest=true
+```
+
+```kotlin
+// build.gradle.kts
+android {
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
+    testOptions {
+        screenshotTests {
+            imageDifferenceThreshold = 0.0001f // 0.01%
+        }
+    }
+}
+```
+
+## 🧪 Running Screenshot Tests
+
+### Generate Reference Images
+First, generate reference images for your composable previews:
+
+```bash
+# Linux/macOS
+./gradlew updateDebugScreenshotTest
+
+# Windows
+gradlew updateDebugScreenshotTest
+```
+
+Reference images will be saved in: `app/src/screenshotTestDebug/reference/`
+
+### Validate Screenshots
+After making changes, validate against reference images:
+
+```bash
+# Linux/macOS
+./gradlew validateDebugScreenshotTest
+
+# Windows
+gradlew validateDebugScreenshotTest
+```
+
+### View Test Reports
+HTML reports are generated at: `app/build/reports/screenshotTest/preview/debug/index.html`
+
+## 📁 Project Structure
+
+```
+app/
+├── src/
+│   ├── main/
+│   │   └── java/com/avciapps/basedemoapp/
+│   │       ├── ui/
+│   │       │   ├── components/
+│   │       │   │   └── SampleComponents.kt    # Sample UI components
+│   │       │   └── theme/
+│   │       │       └── Theme.kt               # Compose theme
+│   │       ├── MainActivity.kt                # Main activity with navigation
+│   │       └── ComposeDemoActivity.kt         # Compose demo screen
+│   └── screenshotTest/
+│       └── kotlin/com/avciapps/basedemoapp/
+│           └── ComposeScreenshotTests.kt      # Screenshot tests
+```
+
+## 🎨 Sample Components
+
+### GreetingCard
+A simple card that displays a personalized welcome message.
+
+```kotlin
+@Composable
+fun GreetingCard(name: String) {
+    Card {
+        Text("Hello $name!")
+    }
+}
+```
+
+### CounterCard
+An interactive counter with increment/decrement functionality.
+
+### ProfileCard
+Displays user profile information with edit functionality.
+
+### SettingsCard
+Settings interface with toggle switches for various options.
+
+## 🧪 Screenshot Test Examples
+
+### Basic Test
+```kotlin
+@PreviewTest
+@Preview(showBackground = true, name = "Greeting Card - Default")
+@Composable
+fun GreetingCardPreview() {
+    BaseDemoAppTheme {
+        GreetingCard(name = "Android")
+    }
+}
+```
+
+### Multi-Preview Test
+```kotlin
+@PreviewTest
+@Preview(showBackground = true, name = "Greeting Card - Different Names")
+@Composable
+fun GreetingCardWithNamesPreview(
+    @PreviewParameter(UserNameProvider::class) name: String
+) {
+    BaseDemoAppTheme {
+        GreetingCard(name = name)
+    }
+}
+```
+
+### Theme Testing
+```kotlin
+@PreviewTest
+@Preview(showBackground = true, name = "Greeting Card - Dark Theme")
+@Composable
+fun GreetingCardDarkPreview() {
+    BaseDemoAppTheme(darkTheme = true) {
+        GreetingCard(name = "Android")
+    }
+}
+```
+
+## 🔧 Configuration Options
+
+### Image Difference Threshold
+Control the sensitivity of screenshot comparisons:
+
+```kotlin
+android {
+    testOptions {
+        screenshotTests {
+            imageDifferenceThreshold = 0.0001f // 0.01%
+        }
+    }
+}
+```
+
+### Preview Parameters
+Use `PreviewParameterProvider` to test multiple data sets:
+
+```kotlin
+class UserNameProvider : PreviewParameterProvider<String> {
+    override val values = sequenceOf("Android", "Developer", "Tester")
+}
+```
+
+## 📊 Test Reports
+
+When screenshot tests fail, an HTML report is generated showing:
+- Side-by-side comparison of expected vs actual
+- Highlighted differences
+- Detailed analysis of visual changes
+
+## 🎯 Best Practices
+
+1. **Use Descriptive Names**: Give previews meaningful names for better test reports
+2. **Test Multiple Themes**: Include both light and dark theme tests
+3. **Parameterize Tests**: Use `@PreviewParameter` for comprehensive coverage
+4. **Regular Updates**: Update reference images when making intentional UI changes
+5. **Review Reports**: Always review HTML reports to understand visual differences
+
+## 🚀 Getting Started
+
+1. **Clone and Build**: Build the project to ensure all dependencies are resolved
+2. **Generate References**: Run `./gradlew updateDebugScreenshotTest`
+3. **Make Changes**: Modify components in `SampleComponents.kt`
+4. **Validate**: Run `./gradlew validateDebugScreenshotTest`
+5. **Review**: Check the HTML report for visual differences
+
+## 📚 Additional Resources
+
+- [Android Compose Screenshot Testing Documentation](https://developer.android.com/studio/preview/compose-screenshot-testing)
+- [Compose Preview Documentation](https://developer.android.com/jetpack/compose/tooling/preview)
+- [Material 3 Design System](https://m3.material.io/)
+
+## 🤝 Contributing
+
+This demo is part of the Android Demo App Creator project. Feel free to:
+- Add more sample components
+- Improve test coverage
+- Enhance documentation
+- Report issues or suggest improvements
+
+---
+
+**Note**: Compose Screenshot Testing is currently in alpha phase. Features and APIs may change in future releases.
 
 ## Requirements
 

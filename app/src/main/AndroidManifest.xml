@@ -15,6 +15,10 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:theme="@style/Theme.BaseDemoApp" />
+        <activity
+            android:name=".ComposeDemoActivity"
+            android:exported="true"
             android:theme="@style/Theme.BaseDemoApp" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

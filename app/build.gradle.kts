@@ -1,6 +1,8 @@
 plugins {
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.0"
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.screenshot)
 }
 
 android {
@@ -35,6 +37,13 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
+    }
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
+    testOptions {
+        screenshotTests {
+            imageDifferenceThreshold = 0.0001f // 0.01%
+        }
     }
 }
 
@@ -46,6 +55,20 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    
+    // Compose dependencies
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.activity)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    
+    // Screenshot testing dependencies
+    screenshotTestImplementation(libs.screenshot.validation.api)
+    screenshotTestImplementation(libs.androidx.compose.ui.tooling)
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
